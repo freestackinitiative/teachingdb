@@ -2,11 +2,11 @@ import duckdb
 import pandas as pd
 from pathlib import Path
 
-def connect_to_db(con):
-    """Reads in CSV data, creates and returns a DuckDB connection for an in-memory database."""
+def download_db():
+    """Returns a dictionary of dataframes as raw data"""
     raw_data_loc = Path.cwd().glob("data/*.csv")
+    raw_data = {}
     for data in raw_data_loc:
-        df = pd.read_csv(data)
-        con.sql(f"CREATE TABLE {data.stem} AS SELECT * FROM df")
-
-    return con
+        raw_data[data.stem] = pd.read_csv(data)
+    
+    return raw_data
