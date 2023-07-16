@@ -19,3 +19,17 @@ def download_db():
         raw_data[data['table']] = pd.read_csv(data['path'])
     
     return raw_data
+
+
+def connect_db(con, db):
+    """Creates tables in a DuckDB connection using the given dictionary of dataframes"""
+    for table_name, df in db.items():
+        table_data = df
+        con.sql(f"CREATE TABLE {table_name} AS SELECT * FROM table_data")
+
+
+def connect_teachdb(con):
+    """Single function to generate the DuckDB database"""
+    raw_data = download_db()
+    connect_db(con, raw_data)
+    print("Connected to `teachdb` from the Freestack Initiative")

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "teachdb"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
     { name="Martin Arroyo", email="martinm.arroyo7@gmail.com" },
 ]
@@ -18,5 +18,7 @@ classifiers = [
 ]
 dependencies = [
     "pandas",
-    "duckdb"
+    "duckdb",
+    "duckdb_engine",
+    "jupysql"
 ]
