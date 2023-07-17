@@ -2,7 +2,9 @@
 
 By: [Freestack Initiative](https://github.com/freestackinitiative)
 
-**Try `teachdb`**: 
+**Try `teachdb`**: <a target="_blank" href="https://colab.research.google.com/github/freestackinitiative/teachingdb/blob/main/Using_the_teachdb_Database_Freestack_Initiative.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 
 **Install `teachdb`**:
 ```
