@@ -37,4 +37,6 @@ def connect_teachdb(con):
     """Single function to generate the DuckDB database"""
     raw_data = download_db()
     connect_db(con, raw_data)
+    conf = get_config()
+    print(conf.keys(), ": All tables loaded")
     print("Connected to `teachdb` from the Freestack Initiative")
