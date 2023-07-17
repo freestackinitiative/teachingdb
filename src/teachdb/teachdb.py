@@ -1,5 +1,12 @@
+import yaml
 import duckdb
 import pandas as pd
+
+def get_config():
+    with open("config/schema.yaml", "rb") as f:
+        cfg = yaml.load(f, Loader=yaml.SafeLoader)
+    
+    return cfg
 
 
 def download_db():
@@ -14,9 +21,7 @@ def download_db():
         {"table": "boxoffice", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/boxoffice.csv"},
         {"table": "employees", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/employees.csv"}
     ]
-    raw_data = {}
-    for data in raw_data_loc:
-        raw_data[data['table']] = pd.read_csv(data['path'])
+    raw_data = {data["table"]: pd.read_csv(data["path"]) for data in raw_data_loc}
     
     return raw_data
 
