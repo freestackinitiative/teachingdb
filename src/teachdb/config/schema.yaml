@@ -1,9 +1,0 @@
-tables:
-  salesman: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/SALESMAN.csv"
-  customer: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/CUSTOMER.csv"
-  order_details: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/ORDERDETAILS.csv"
-  foods: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/foods.csv"
-  company: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/company.csv"
-  movies: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/movies.csv"
-  boxoffice: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/boxoffice.csv"
-  employees: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/employees.csv"

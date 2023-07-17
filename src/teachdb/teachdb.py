@@ -1,13 +1,5 @@
-import yaml
 import duckdb
 import pandas as pd
-
-def get_config():
-    with open("config/schema.yaml", "rb") as f:
-        cfg = yaml.load(f, Loader=yaml.SafeLoader)
-    
-    return cfg
-
 
 def download_db():
     """Returns a dictionary of dataframes as raw data"""
@@ -37,6 +29,4 @@ def connect_teachdb(con):
     """Single function to generate the DuckDB database"""
     raw_data = download_db()
     connect_db(con, raw_data)
-    conf = get_config()
-    print(conf.keys(), ": All tables loaded")
     print("Connected to `teachdb` from the Freestack Initiative")
