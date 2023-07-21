@@ -67,7 +67,7 @@ FROM sample_table;
 
 ### `teachdb.teachdb.connect_teachdb(connection, database="core")`
 
-This method is used to load your desired database into your environment using a `duckdb` connection. It takes a `duckdb` connection and an optional `database` specification and loads in the requested data. The database that you specify here must exist in the `teachdb` schema. Use the `get_schema` method to see all the available databases through `teachdb`.    
+This method is used to load your desired database into your environment using a `duckdb` connection. It takes a `duckdb` connection and an optional `database` specification and loads in the requested data. The database that you specify here must exist in the `teachdb` schema. Use the `get_schema` method to see all the available databases through `teachdb`. The `core` database is the default database from `teachdb`. 
 
 ```python
 import duckdb
@@ -75,7 +75,7 @@ from teachdb.teachdb import connect_teachdb
 
 %load_ext sql
 con = duckdb.connect(":memory:")
-connect_teachdb(con)
+connect_teachdb(con, database="ds_salaries")
 %sql con
 ```
 
