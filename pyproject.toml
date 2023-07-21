@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.setuptools.package-data]
-mypkg = ["*.yml", "*.yaml"]
+teachdb = ["teachdb/config/*.yml", "teachdb/config/*.yaml"]
 
 [project]
 name = "teachdb"
