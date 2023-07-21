@@ -1,6 +1,6 @@
 """A collection of paths from the `teachingdb_data repo: https://github.com/freestackinitiative/teachingdb_data"""
 import yaml
-from pathlib import Path
+import pkg_resources
 
 CORE = [
     {"table": "salesman", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/core/SALESMAN.csv"},
@@ -31,6 +31,7 @@ def load_paths(database):
 
 
 def loader():
-    with open(Path.cwd()/"config/schema.yml", "r") as f:
+    path = pkg_resources.resource_filename("teachdb", "config/schema.yml")
+    with open(path, "r") as f:
         schema = yaml.load(f, Loader=yaml.SafeLoader)
     print(schema)
