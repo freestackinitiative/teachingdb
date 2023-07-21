@@ -1,1 +1,1 @@
-include src/teachdb/config/schema.*
+include src/teachdb/config/*

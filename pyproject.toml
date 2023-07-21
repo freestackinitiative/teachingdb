@@ -1,12 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.setuptools.package-data]
-teachdb = ["*.yml", "*.yaml"]
 
 [project]
 name = "teachdb"
@@ -28,3 +22,9 @@ dependencies = [
     "duckdb_engine",
     "jupysql"
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mypkg = ["*.yml", "*.yaml"]
