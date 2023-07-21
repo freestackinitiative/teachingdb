@@ -1,1 +1,1 @@
-graft src/teachdb/config
+include src/teachdb/config/schema.yml
