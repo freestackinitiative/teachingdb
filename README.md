@@ -63,6 +63,8 @@ df = pd.DataFrame({"ColA": list(range(10)), "ColB": list(range(10))})
 data = {"sample_table": df}
 con = duckdb.connect(":memory:")
 connect_db(con, data)
+%load_ext sql
+%sql con
 ```
 
 Now you can query your dataframe:
