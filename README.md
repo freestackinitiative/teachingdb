@@ -38,16 +38,6 @@ FROM company
 
 ## Python API
 
-### `teachdb.teachdb.download_db()`
-
-Retrieves the data tables that make up `teachdb` and returns a dictionary of `pandas` Data Frames with table names as the keys. It accepts no arguments.
-
-```python
-from teachdb.teachdb import download_db
-
-database = download_db()
-``` 
-
 ### `teachdb.teachdb.connect_db(connection, data)`
 
 This method creates the tables in the `DuckDB` connection object using the supplied `data`. 
@@ -75,9 +65,9 @@ SELECT *
 FROM sample_table;
 ```
 
-### `teachdb.teachdb.connect_teachdb(connection)`
+### `teachdb.teachdb.connect_teachdb(connection, database="core")`
 
-This method is a convenience wrapper around the `download_db` and `connect_db` methods. It is a convenience function used primarily to simplify usage. All it expects is a `DuckDB` connection as input. It downloads the data and connects it to the connection object it received, thus making the data query-able.
+This method is used to load your desired database into your environment using a `duckdb` connection. It takes a `duckdb` connection and an optional `database` specification and loads in the requested data. The database that you specify here must exist in the `teachdb` schema. Use the `get_schema` method to see all the available databases through `teachdb`.    
 
 ```python
 import duckdb
@@ -87,4 +77,15 @@ from teachdb.teachdb import connect_teachdb
 con = duckdb.connect(":memory:")
 connect_teachdb(con)
 %sql con
+```
+
+### `teachdb.loader.get_schema()`
+
+The `get_schema` method returns a dictionary of databases, tables, and their respective paths that are available in `teachdb`.
+
+```python
+from teachdb.loader import get_schema
+
+schema = get_schema()
+print(schema)
 ```

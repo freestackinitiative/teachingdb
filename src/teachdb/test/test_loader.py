@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import mock_open, MagicMock
-from teachdb.loader import load_paths, loader
+from teachdb.loader import _load_paths, get_schema
 
 # Mocks
 mock_yaml = MagicMock()
@@ -12,7 +12,7 @@ def test_loader(mocker):
     mocker.patch('yaml.load', return_value=mock_yaml)
     mocker.patch('pkg_resources.resource_filename', return_value='teachdb/config/schema.yml')
     
-    schema = loader()
+    schema = get_schema()
     
     mock_open_function.assert_called_once_with('teachdb/config/schema.yml', 'r')
     assert schema == mock_yaml
@@ -20,9 +20,9 @@ def test_loader(mocker):
 @pytest.mark.parametrize("database", ["core", "test_db"])
 def test_load_paths(mocker, database):
     """Test the load_paths function"""
-    mock_loader = mocker.patch('teachdb.loader.loader', return_value={"databases": {database: {}}})
+    mock_loader = mocker.patch('teachdb.loader.get_schema', return_value={"databases": {database: {}}})
     
-    paths = load_paths(database)
+    paths = _load_paths(database)
     
     mock_loader.assert_called_once()
     assert paths == {}

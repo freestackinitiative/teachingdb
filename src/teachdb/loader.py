@@ -2,13 +2,13 @@
 import yaml
 import pkg_resources
 
-def load_paths(database):
+def _load_paths(database):
     """Returns the desired collection of paths from the specified database defined in the schema"""
-    schema = loader()
+    schema = get_schema()
     return schema["databases"][database]
 
 
-def loader():
+def get_schema():
     path = pkg_resources.resource_filename("teachdb", "config/schema.yml")
     with open(path, "r") as f:
         schema = yaml.load(f, Loader=yaml.SafeLoader)
