@@ -31,6 +31,6 @@ def load_paths(database):
 
 
 def loader():
-    with open("config/schema.yml", "r") as f:
+    with open(Path.cwd()/"config/schema.yml", "r") as f:
         schema = yaml.load(f, Loader=yaml.SafeLoader)
     print(schema)
