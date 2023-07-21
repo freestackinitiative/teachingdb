@@ -1,5 +1,4 @@
-# "databases" should be URLs to CSV files with the name of the table as the key. 
-  
+# "databases" should be URLs to CSV files with the name of the table as the key.   
 databases:
   core:
     salesman: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/core/SALESMAN.csv

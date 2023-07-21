@@ -1,17 +1,29 @@
 import pytest
-from teachdb.loader import load_paths, CORE, DS_SALARIES
+from unittest.mock import mock_open, MagicMock
+from teachdb.loader import load_paths, loader
 
-def test_load_paths():
-    """Test load_paths function"""
-    # Check the returned value for the "core" database
-    result_core = load_paths(database="core")
-    assert result_core == CORE
+# Mocks
+mock_yaml = MagicMock()
 
-    # Check the returned value for the "ds_salaries" database
-    result_ds_salaries = load_paths(database="ds_salaries")
-    assert result_ds_salaries == DS_SALARIES
+def test_loader(mocker):
+    """Test the loader function"""
+    mock_open_function = mock_open(read_data="databases: {core: {table1: path1, table2: path2}}")
+    mocker.patch('builtins.open', mock_open_function)
+    mocker.patch('yaml.load', return_value=mock_yaml)
+    mocker.patch('pkg_resources.resource_filename', return_value='teachdb/config/schema.yml')
+    
+    schema = loader()
+    
+    mock_open_function.assert_called_once_with('teachdb/config/schema.yml', 'r')
+    assert schema == mock_yaml
 
-    # Check if the function raises a KeyError for an unknown database
-    with pytest.raises(KeyError):
-        load_paths(database="unknown")
+@pytest.mark.parametrize("database", ["core", "test_db"])
+def test_load_paths(mocker, database):
+    """Test the load_paths function"""
+    mock_loader = mocker.patch('teachdb.loader.loader', return_value={"databases": {database: {}}})
+    
+    paths = load_paths(database)
+    
+    mock_loader.assert_called_once()
+    assert paths == {}
 

@@ -1,10 +1,10 @@
 import duckdb
 import pandas as pd
-from teachdb.loader import load_paths, loader
+from teachdb.loader import load_paths
 
 def download_db(paths):
     """Returns a dictionary of dataframes as raw data"""
-    raw_data = {data["table"]: pd.read_csv(data["path"]) for data in paths}
+    raw_data = {table: pd.read_csv(path) for table, path in paths.items()}
     return raw_data
 
 
@@ -13,6 +13,7 @@ def connect_db(con, db):
     for table_name, df in db.items():
         table_data = df
         con.sql(f"CREATE TABLE {table_name} AS SELECT * FROM table_data")
+    return con
 
 
 def connect_teachdb(con, database="core"):
@@ -21,7 +22,4 @@ def connect_teachdb(con, database="core"):
     raw_data = download_db(paths=paths)
     connect_db(con, raw_data)
     print(f"Connected to the `teachdb` from the Freestack Initiative. You are using the `{database}` database.")
-
-
-def tester():
-    loader()
+    return con

@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+*$py.class
+venv
+Dockerfile
+Using_the_teachdb_Database_Freestack_Initiative.ipynb
