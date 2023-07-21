@@ -1,57 +1,38 @@
-import pytest
-import pandas as pd
 import duckdb
-from teachdb.teachdb import download_db, connect_db, connect_teachdb  # replace with the name of your module
+import pandas as pd
+import pytest
+from unittest import mock
+from teachdb.loader import load_paths
+from teachdb.teachdb import download_db, connect_db, connect_teachdb
 
-def test_download_db(mocker):
-    # Mock the response from pd.read_csv
-    mock_read_csv = mocker.patch('pandas.read_csv', return_value=pd.DataFrame())
+# Mock data to simulate what load_paths might return
+paths_mock = [
+    {"table": "table1", "path": "path1.csv"},
+    {"table": "table2", "path": "path2.csv"},
+]
 
-    # Call the function
-    result = download_db()
+# Mock data to simulate what pandas.read_csv might return
+csv_data_mock = pd.DataFrame({'Column1': [1, 2], 'Column2': ['a', 'b']})
 
-    # Check the return type
+@mock.patch('pandas.read_csv', return_value=csv_data_mock)
+def test_download_db(mock_read_csv):
+    """Test download_db function"""
+    result = download_db(paths=paths_mock)
+
+    # Check if the returned object is a dictionary
     assert isinstance(result, dict)
+    # Check if the keys in the dictionary match the table names in paths_mock
+    assert set(result.keys()) == set([data["table"] for data in paths_mock])
+    # Check if the dataframes match the mock data
     for df in result.values():
-        assert isinstance(df, pd.DataFrame)
-
-    # Check if the pd.read_csv is called the expected number of times
-    assert mock_read_csv.call_count == 8
+        pd.testing.assert_frame_equal(df, csv_data_mock)
 
 
-def test_connect_db(mocker):
-    # Mock the connection and sql execution
-    mock_con = mocker.Mock()
+@mock.patch('duckdb.connect')
+def test_connect_db(mock_con):
+    """Test connect_db function"""
+    raw_data = {data["table"]: csv_data_mock for data in paths_mock}
+    connect_db(mock_con, raw_data)
+    # Check if the function called con.sql the correct number of times
+    assert mock_con.sql.call_count == len(paths_mock)
 
-    # Mock data
-    mock_data = {
-        "table1": pd.DataFrame(),
-        "table2": pd.DataFrame()
-    }
-
-    # Call the function
-    connect_db(mock_con, mock_data)
-
-    # Check if the sql execution method is called the expected number of times
-    assert mock_con.sql.call_count == len(mock_data)
-
-
-def test_connect_teachdb(mocker):
-    # Mock the download_db response
-    mock_download_db = mocker.patch('teachdb.teachdb.download_db', return_value={
-        "table1": pd.DataFrame(),
-        "table2": pd.DataFrame()
-    })
-
-    # Mock the connection
-    mock_con = mocker.Mock()
-
-    # Mock the connect_db method
-    mock_connect_db = mocker.patch('teachdb.teachdb.connect_db')
-
-    # Call the function
-    connect_teachdb(mock_con)
-
-    # Check if download_db and connect_db methods are called once
-    assert mock_download_db.called_once()
-    assert mock_connect_db.called_once()

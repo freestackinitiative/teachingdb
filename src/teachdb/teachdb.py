@@ -1,20 +1,10 @@
 import duckdb
 import pandas as pd
+from teachdb.loader import load_paths
 
-def download_db():
+def download_db(paths):
     """Returns a dictionary of dataframes as raw data"""
-    raw_data_loc = [
-        {"table": "salesman", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/SALESMAN.csv"},
-        {"table": "customer", "path":"https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/CUSTOMER.csv"},
-        {"table": "order_details", "path":"https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/ORDERDETAILS.csv"},
-        {"table": "foods", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/foods.csv"},
-        {"table": "company", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/company.csv"},
-        {"table": "movies", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/movies.csv"},
-        {"table": "boxoffice", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/boxoffice.csv"},
-        {"table": "employees", "path": "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/employees.csv"}
-    ]
-    raw_data = {data["table"]: pd.read_csv(data["path"]) for data in raw_data_loc}
-    
+    raw_data = {data["table"]: pd.read_csv(data["path"]) for data in paths}
     return raw_data
 
 
@@ -25,8 +15,9 @@ def connect_db(con, db):
         con.sql(f"CREATE TABLE {table_name} AS SELECT * FROM table_data")
 
 
-def connect_teachdb(con):
+def connect_teachdb(con, database="core"):
     """Single function to generate the DuckDB database"""
-    raw_data = download_db()
+    paths = load_paths(database)
+    raw_data = download_db(paths=paths)
     connect_db(con, raw_data)
-    print("Connected to `teachdb` from the Freestack Initiative")
+    print(f"Connected to the `teachdb` from the Freestack Initiative. You are using the `{database}` database.")
