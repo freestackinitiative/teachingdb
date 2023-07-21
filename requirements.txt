@@ -1,0 +1,4 @@
+duckdb
+pandas
+pytest
+pytest-mock
