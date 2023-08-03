@@ -16,3 +16,6 @@ databases:
     employment_types: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/ds_salaries/employment_types.csv
     experience_levels: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/ds_salaries/experience_levels.csv
     usd_exchange_rates: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/ds_salaries/usd_exchange_rates.csv
+  
+  stocks:
+    stocks: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/stocks/stocks.csv"
