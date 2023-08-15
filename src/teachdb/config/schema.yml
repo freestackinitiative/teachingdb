@@ -19,3 +19,13 @@ databases:
   
   stocks:
     stocks: "https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/stocks/stocks.csv"
+
+  sql_murder_mystery:
+    crime_scene_report: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/crime_scene_report.csv"
+    drivers_license: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/drivers_license.csv"
+    facebook_event_checkin: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/facebook_event_checkin.csv"
+    get_fit_now_check_in: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/get_fit_now_check_in.csv"
+    get_fit_now_member: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/get_fit_now_member.csv"
+    income: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/income.csv"
+    interview: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/interview.csv"
+    person: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/person.csv"
