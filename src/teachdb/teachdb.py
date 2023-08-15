@@ -16,10 +16,12 @@ def connect_db(con, db):
     return con
 
 
-def connect_teachdb(con, database="core"):
+def connect_teachdb(con=None, database="core"):
     """Single function to generate the DuckDB database"""
     paths = _load_paths(database)
     raw_data = _download_db(paths=paths)
-    connect_db(con, raw_data)
+    if con is None:
+        con = duckdb.connect()
+    connection = connect_db(con, raw_data)
     print(f"Connected to the `teachdb` from the Freestack Initiative. You are using the `{database}` database.")
-    return con
+    return connection
