@@ -29,3 +29,13 @@ databases:
     income: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/income.csv"
     interview: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/interview.csv"
     person: "https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sql_murder_mystery/person.csv"
+
+  transportation:
+    Bus_Depot: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Depot.csv
+    Bus_Driver: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Driver.csv
+    Bus_Route: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Route.csv
+    Bus_Shift: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Shift.csv
+    Bus_Trip: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Trip.csv
+    Bus_Types: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Types.csv
+    Route_Landmark: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Route_Landmark.csv
+    Route_Landmark_Routes: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Route_Landmark_Routes.csv
