@@ -39,3 +39,17 @@ databases:
     Bus_Types: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Bus_Types.csv
     Route_Landmark: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Route_Landmark.csv
     Route_Landmark_Routes: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/transportation/Route_Landmark_Routes.csv
+
+  restaurant:
+    Customers: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/Customers.csv
+    CustomerDishes: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/CustomerDishes.csv
+    CustomerEvents: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/CustomerEvents.csv
+    Dishes: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/Dishes.csv
+    Events: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/Orders.csv
+    OrderDishes: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/OrderDishes.csv
+    Reservations: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/restaurant/Reservations.csv
+
+  sales_cogs_opex:
+    sales: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sales_cogs_opex/sales.csv
+    cogs: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sales_cogs_opex/cogs.csv
+    opex: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sales_cogs_opex/opex.csv
