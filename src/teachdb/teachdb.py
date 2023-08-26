@@ -16,25 +16,25 @@ def connect_db(con, db):
     return con
 
 
-def _extract_data(database="core"):
-    raw_data = []
-    if isinstance(database, list):
-        for db in database:
-            paths = _load_paths(db)
-            data = _download_db(paths)
-            raw_data.append(data)
-    else:
-        raw_data.append(_download_db(_load_paths(database)))
-    return raw_data
+def _multi_connect_db(con, databases):
+    
+    for db in databases:
+        paths = _load_paths(db)
+        data = _download_db(paths)
+        connect_db(con, data)
+
+    return con
 
 
-def connect_teachdb(con=None, database="core"):
+def connect_teachdb(con=None, database="core", databases=None):
     """Single function to generate the DuckDB database"""
     if con is None:
         con = duckdb.connect()
-    raw_data = _extract_data(database)
-    connection = None
-    for data in raw_data:
-        connection = connect_db(con, data)
-    print(f"Connected to the `teachdb` from the Freestack Initiative. You are using the `{database}` database(s).")
-    return connection
+    # Handle requesting multiple databases vs single db
+    if databases:
+        _multi_connect_db(con, databases)
+    else:
+        raw_data = _download_db(_load_paths(database))
+        connect_db(con, raw_data)
+    print(f"Connected to the `teachdb` from the Freestack Initiative.")
+    return con
