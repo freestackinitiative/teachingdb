@@ -45,6 +45,7 @@ databases:
     CustomersDishes: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/CustomersDishes.csv
     CustomersEvents: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/CustomersEvents.csv
     Dishes: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/Dishes.csv
+    NewDishes: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/NewDishes.csv
     Events: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/Orders.csv
     OrdersDishes: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/OrdersDishes.csv
     Reservations: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/restaurant/Reservations.csv
