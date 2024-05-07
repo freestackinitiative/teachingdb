@@ -54,3 +54,14 @@ databases:
     sales: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sales_cogs_opex/sales.csv
     cogs: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sales_cogs_opex/cogs.csv
     opex: https://github.com/freestackinitiative/teachingdb_data/raw/main/data/sales_cogs_opex/opex.csv
+
+  capstone:
+    ad_exposure_2021: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2021Ad_Exposure.csv
+    site_traffic_2021: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2021Site_Traffic.csv
+    user_engagement_2021: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2021User_Engagement.csv
+    ad_exposure_2022: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2022Ad_Exposure.csv
+    site_traffic_2022: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2022Site_Traffic.csv
+    user_engagement_2022: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2022User_Engagement.csv
+    ad_exposure_2023: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2023Ad_Exposure.csv
+    site_traffic_2023: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2023Site_Traffic.csv
+    user_engagement_2023: https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/data/capstone/2023User_Engagement.csv
