@@ -1,6 +1,29 @@
 import duckdb
 import requests
+import pandas as pd
+from IPython import get_ipython
 from typing import Dict, List, Union, Optional
+
+def setup_notebook(connection: duckdb.DuckDBPyConnection):
+    # Get the IPython instance
+    ipython = get_ipython()
+    
+    # Load the SQL extension
+    ipython.run_line_magic('load_ext', 'sql')
+    
+    # Set SqlMagic configurations
+    ipython.run_line_magic('config', 'SqlMagic.autopandas = True')
+    ipython.run_line_magic('config', 'SqlMagic.feedback = False')
+    ipython.run_line_magic('config', 'SqlMagic.displaycon = False')
+    
+    # Set pandas display options
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', None)
+    pd.set_option('display.max_colwidth', 99)
+    ipython.run_line_magic('sql', connection)
+
+
 
 def _get_schema() -> Union[Dict[str, Dict[str, Dict[str, str]]], None]:
     try:
@@ -18,7 +41,7 @@ def _get_schema() -> Union[Dict[str, Dict[str, Dict[str, str]]], None]:
     return None
 
 
-def _connect_db(con: duckdb.DuckDBPyConnection, 
+def _load_db(con: duckdb.DuckDBPyConnection, 
                schema: Dict[str, str]) -> duckdb.DuckDBPyConnection:
     """Creates tables in a DuckDB connection using the given schema"""
     for table_name, table_data in schema.items():
@@ -39,11 +62,12 @@ def connect_teachdb(con: Optional[duckdb.DuckDBPyConnection] = None,
     if isinstance(database, list):
         for db in database:
             try:
-                _connect_db(con, schema[db])
+                _load_db(con, schema[db])
             except KeyError:
                 print(f"Database {db} does not exist in teachdb")
     else:
-        _connect_db(con, schema[database])
+        _load_db(con, schema[database])
 
     print(f"Connected to the `teachdb` from the Freestack Initiative.")
+    setup_notebook(connection=con)
     return con
