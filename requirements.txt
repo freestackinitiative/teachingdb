@@ -1,5 +1,4 @@
 duckdb
-pandas
+requests
 pytest
 pytest-mock
-pyyaml
