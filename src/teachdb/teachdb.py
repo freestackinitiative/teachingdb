@@ -21,7 +21,6 @@ def setup_notebook(connection: duckdb.DuckDBPyConnection):
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', None)
     pd.set_option('display.max_colwidth', 99)
-    ipython.run_line_magic('sql', connection)
 
 
 
@@ -69,5 +68,5 @@ def connect_teachdb(con: Optional[duckdb.DuckDBPyConnection] = None,
         _load_db(con, schema[database])
 
     print(f"Connected to the `teachdb` from the Freestack Initiative.")
-    setup_notebook(connection=con)
+    setup_notebook()
     return con
