@@ -4,7 +4,7 @@ import pandas as pd
 from IPython import get_ipython
 from typing import Dict, List, Union, Optional
 
-def setup_notebook(connection: duckdb.DuckDBPyConnection):
+def setup_notebook():
     # Get the IPython instance
     ipython = get_ipython()
     
