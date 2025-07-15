@@ -47,7 +47,7 @@ def _load_db(conn: duckdb.DuckDBPyConnection,
     conn.sql(f"CREATE SCHEMA {schema_name};")
     # Load the tables
     for table_name, table_data in schema.items():
-        conn.sql(f"CREATE TABLE {table_name} AS "
+        conn.sql(f"CREATE TABLE {schema_name}.{table_name} AS "
                 f"SELECT * FROM read_csv('{table_data}', "
                 "auto_type_candidates = [DATE, TIMESTAMP, INTEGER, FLOAT])")
     return conn
