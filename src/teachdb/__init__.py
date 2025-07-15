@@ -88,6 +88,6 @@ def get_database_schema(conn: duckdb.DuckDBPyConnection, schema: Optional[str] =
     query = f"SELECT * FROM duckdb_tables"
     
     if schema:
-        query += f" WHERE schema_name={schema};"
+        query += f" WHERE schema_name='{schema}';"
     
     return conn.execute(query).fetchall()
