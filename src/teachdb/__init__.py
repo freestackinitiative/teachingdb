@@ -69,7 +69,7 @@ def connect_teachdb(conn: Optional[duckdb.DuckDBPyConnection] = None,
             except KeyError:
                 print(f"Database `{db}` does not exist in teachdb")
     else:
-        _load_db(conn, schema[database])
+        _load_db(conn=conn, schema_name=database, schema=schema[database])
 
     print(f"Connected to the `teachdb` from the Freestack Initiative.")
     print("If you are in a notebook environment, import and run `setup_notebook` to configure your notebook environment for use.")
