@@ -7,20 +7,29 @@ from typing import Dict, List, Union, Optional, Tuple, Any
 TeachDBSchema = Union[Dict[str, Dict[str, Dict[str, str]]], None]
 Connection = Union[duckdb.DuckDBPyConnection, None]
 
-def get_available_schemas() -> TeachDBSchema:
-        try:
-            schema = requests.get("https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/schema.json")
-            if schema.status_code == 200:
-                schema = schema.json()
-                return schema["databases"]
-            else:
-                raise ValueError("Unable to get schema from teachingdb_data. Is it still up?"
-                                " Please check https://github.com/freestackinitiative/teachingdb_data"
-                                " to ensure that it is still there.")
-        except requests.JSONDecodeError as exc:
-            print(f"Unable to parse schema: {str(exc)}")
+class TeachDBConnectionError(Exception):
+    pass
 
-        return None
+class TeachDBSchemaError(Exception):
+    pass
+
+class TeachDBQueryExecutionError(Exception):
+    pass
+
+def get_available_schemas() -> TeachDBSchema:
+    try:
+        schema = requests.get("https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/schema.json")
+        schema.raise_for_status()
+        schema = schema.json()
+        return schema["databases"]
+    except requests.JSONDecodeError as exc:
+        raise TeachDBSchemaError(f"Unable to parse schema:\n{schema}\nCaused by exception: {str(exc)}")
+    except Exception:
+        raise TeachDBSchemaError(
+            "Unable to get schema from teachingdb_data. Is it still up?"
+            " Please check https://github.com/freestackinitiative/teachingdb_data"
+            " to ensure that it is still there."
+        )
 
 
 class TeachDB:
@@ -29,20 +38,25 @@ class TeachDB:
                  database: Union[List[str], str] = "core", 
                  include_schemas: bool = False):
         
-        self.connection: Connection = None
+        self._connection: Connection = None
         self._initialize_db_connection(connection=connection)
         self.database: Union[List[str], str] = database
         self.database_schemas: TeachDBSchema = get_available_schemas()
         self.include_schemas: bool = include_schemas
         self._initialize_db()
 
-    def _initialize_db_connection(self, 
-                               connection: Optional[Connection] = None
-                               ) -> None:
+    @property
+    def connection(self):
+        if not self._connection:
+            raise TeachDBConnectionError("No connection found")
+        
+        return self._connection
+
+    def _initialize_db_connection(self, connection: Optional[Connection] = None) -> None:
         if connection is None:
-            self.connection = duckdb.connect()
+            self._connection = duckdb.connect()
         else:
-            self.connection = connection
+            self._connection = connection
 
         return None
     
@@ -51,24 +65,26 @@ class TeachDB:
                 schema: Dict[str, str]) -> None:
         """Creates tables in a DuckDB connection using the given schema"""
         # Create the schema
-        self.connection.sql(f"CREATE SCHEMA {schema_name};")
+        self._connection.sql(f"CREATE SCHEMA {schema_name};")
         # Load the tables
         for table_name, table_data in schema.items():
             # Handle if we want to separate the data into schemas or not
+            table_name = table_name 
             if self.include_schemas:
-                sql_statement = (
-                    f"CREATE TABLE {schema_name}.{table_name} AS "
-                    f"SELECT * FROM read_csv('{table_data}', "
-                    "auto_type_candidates = [DATE, TIMESTAMP, INTEGER, FLOAT])"
-                )
-            else:
-                sql_statement = (
-                    f"CREATE TABLE {table_name} AS "
-                    f"SELECT * FROM read_csv('{table_data}', "
-                    "auto_type_candidates = [DATE, TIMESTAMP, INTEGER, FLOAT])"
-                )
+                table_name = f"{schema_name}.{table_name}"
             
-            self.connection.sql(sql_statement)
+            sql_statement = (
+                f"CREATE TABLE {table_name} AS "
+                f"SELECT * FROM read_csv('{table_data}', "
+                "auto_type_candidates = [DATE, TIMESTAMP, INTEGER, FLOAT])"
+            )
+            try:
+                self._connection.sql(sql_statement)
+            except Exception as ex:
+                raise TeachDBQueryExecutionError(
+                    f"Your query, {sql_statement}, failed due to "
+                    f"the following exception: {str(ex)}"
+                )
 
         return None
 
@@ -81,6 +97,7 @@ class TeachDB:
                     self._load_db(schema_name=db, schema=self.database_schemas[db])
                 except KeyError:
                     print(f"Database `{db}` does not exist in teachdb")
+                    continue
         else:
             self._load_db(schema_name=self.database, schema=self.database_schemas[self.database])
 
@@ -102,7 +119,14 @@ class TeachDB:
         if schema:
             query += f" WHERE schema_name='{schema}';"
         
-        return self.connection.execute(query).fetchall()
+        try:
+            database_schema = self._connection.execute(query).fetchall()
+            return database_schema
+        except Exception as ex:
+            raise TeachDBQueryExecutionError(
+                f"Your query, {query}, failed due to "
+                f"the following exception: {str(ex)}"
+            )
 
     def setup_notebook(self) -> None:
         # Get the IPython instance
