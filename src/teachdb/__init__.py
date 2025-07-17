@@ -5,6 +5,7 @@ from IPython import get_ipython
 from typing import Dict, List, Union, Optional, Tuple, Any
 
 TeachDBSchema = Union[Dict[str, Dict[str, Dict[str, str]]], None]
+TeachDBResult = Union[List[Tuple[Any]], None]
 Connection = Union[duckdb.DuckDBPyConnection, None]
 
 class TeachDBConnectionError(Exception):
@@ -122,6 +123,16 @@ class TeachDB:
         try:
             database_schema = self._connection.execute(query).fetchall()
             return database_schema
+        except Exception as ex:
+            raise TeachDBQueryExecutionError(
+                f"Your query, {query}, failed due to "
+                f"the following exception: {str(ex)}"
+            )
+        
+    def execute_query(self, query: str) -> TeachDBResult:
+        try:
+            result = self.connection.execute(query).fetchall()
+            return result
         except Exception as ex:
             raise TeachDBQueryExecutionError(
                 f"Your query, {query}, failed due to "
