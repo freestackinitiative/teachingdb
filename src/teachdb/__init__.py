@@ -7,6 +7,22 @@ from typing import Dict, List, Union, Optional, Tuple, Any
 TeachDBSchema = Union[Dict[str, Dict[str, Dict[str, str]]], None]
 Connection = Union[duckdb.DuckDBPyConnection, None]
 
+def get_available_schemas() -> TeachDBSchema:
+        try:
+            schema = requests.get("https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/schema.json")
+            if schema.status_code == 200:
+                schema = schema.json()
+                return schema["databases"]
+            else:
+                raise ValueError("Unable to get schema from teachingdb_data. Is it still up?"
+                                " Please check https://github.com/freestackinitiative/teachingdb_data"
+                                " to ensure that it is still there.")
+        except requests.JSONDecodeError as exc:
+            print(f"Unable to parse schema: {str(exc)}")
+
+        return None
+
+
 class TeachDB:
     def __init__(self, 
                  connection: Optional[Connection] = None, 
@@ -16,7 +32,7 @@ class TeachDB:
         self.connection: Connection = None
         self._initialize_db_connection(connection=connection)
         self.database: Union[List[str], str] = database
-        self.database_schemas: TeachDBSchema = self._get_available_schemas()
+        self.database_schemas: TeachDBSchema = get_available_schemas()
         self.include_schemas: bool = include_schemas
         self._initialize_db()
 
@@ -70,21 +86,6 @@ class TeachDB:
 
         print(f"Connected to the `teachdb` from the Freestack Initiative.")
         print("If you are in a notebook environment, run the `setup_notebook` method to configure your notebook environment for use.")
-        return None
-
-    def _get_available_schemas(self) -> TeachDBSchema:
-        try:
-            schema = requests.get("https://raw.githubusercontent.com/freestackinitiative/teachingdb_data/main/schema.json")
-            if schema.status_code == 200:
-                schema = schema.json()
-                return schema["databases"]
-            else:
-                raise ValueError("Unable to get schema from teachingdb_data. Is it still up?"
-                                " Please check https://github.com/freestackinitiative/teachingdb_data"
-                                " to ensure that it is still there.")
-        except requests.JSONDecodeError as exc:
-            print(f"Unable to parse schema: {str(exc)}")
-
         return None
 
     def get_database_schema(self, schema: Optional[str] = None) -> List[Tuple[Any]]:
