@@ -44,6 +44,7 @@ class TeachDB:
         self.database: Union[List[str], str] = database
         self.database_schemas: TeachDBSchema = get_available_schemas()
         self.include_schemas: bool = include_schemas
+        self.current_schemas: List[str] = []
         self._initialize_db()
 
     @property
@@ -61,31 +62,46 @@ class TeachDB:
 
         return None
     
-    def _load_db(self,
-                schema_name: str, 
-                schema: Dict[str, str]) -> None:
-        """Creates tables in a DuckDB connection using the given schema"""
-        # Create the schema
-        self._connection.sql(f"CREATE SCHEMA {schema_name};")
-        # Load the tables
-        for table_name, table_data in schema.items():
-            # Handle if we want to separate the data into schemas or not
-            table_name = table_name 
-            if self.include_schemas:
-                table_name = f"{schema_name}.{table_name}"
-            
-            sql_statement = (
-                f"CREATE TABLE {table_name} AS "
-                f"SELECT * FROM read_csv('{table_data}', "
-                "auto_type_candidates = [DATE, TIMESTAMP, INTEGER, FLOAT])"
-            )
-            try:
-                self._connection.sql(sql_statement)
-            except Exception as ex:
-                raise TeachDBQueryExecutionError(
-                    f"Your query, {sql_statement}, failed due to "
-                    f"the following exception: {str(ex)}"
+    def load_db(self, 
+                schema: Dict[str, bytes],
+                schema_name: Optional[str] = None) -> None:
+        """Creates tables in a DuckDB connection using the given schema.
+        
+        Expects an input of a dictionary with table names as the key and data as the values.
+        The data is expected to be a CSV file as bytes.
+
+        Example:
+        schema = {
+            "restaurants": <csv bytes>
+        }
+        Args:
+            schema (Dictionary[str, bytes]) = The data you want to load into the DuckDB connection. Expects table names as keys 
+                                            and CSV data representing the table as values. 
+            schema_name (Optional string) = The name you wish to use for the database schema
+        """
+        if schema_name not in self.current_schemas:
+            # Create the schema
+            self._connection.sql(f"CREATE SCHEMA {schema_name};")
+            # Load the tables
+            for table_name, table_data in schema.items():
+                # Handle if we want to separate the data into schemas or not
+                table_name = table_name 
+                if self.include_schemas:
+                    table_name = f"{schema_name}.{table_name}"
+                
+                sql_statement = (
+                    f"CREATE TABLE {table_name} AS "
+                    f"SELECT * FROM read_csv('{table_data}', "
+                    "auto_type_candidates = [DATE, TIMESTAMP, INTEGER, FLOAT])"
                 )
+                try:
+                    self._connection.sql(sql_statement)
+                    self.current_schemas.append(schema_name)
+                except Exception as ex:
+                    raise TeachDBQueryExecutionError(
+                        f"Your query, {sql_statement}, failed due to "
+                        f"the following exception: {str(ex)}"
+                    )
 
         return None
 
@@ -93,14 +109,16 @@ class TeachDB:
         """Single function to generate the TeachDB database"""
         # Handle requesting multiple databases vs single db
         if isinstance(self.database, list):
-            for db in self.database:
-                try:
-                    self._load_db(schema_name=db, schema=self.database_schemas[db])
+            for db in self.database: 
+                try:   
+                    self.load_db(schema_name=db, schema=self.database_schemas[db])
+                    self.current_schemas.append(db)
                 except KeyError:
                     print(f"Database `{db}` does not exist in teachdb")
+                finally:
                     continue
         else:
-            self._load_db(schema_name=self.database, schema=self.database_schemas[self.database])
+            self.load_db(schema_name=self.database, schema=self.database_schemas[self.database])
 
         print(f"Connected to the `teachdb` from the Freestack Initiative.")
         print("If you are in a notebook environment, run the `setup_notebook` method to configure your notebook environment for use.")
@@ -115,7 +133,7 @@ class TeachDB:
         Returns:
             A list of tuples representing rows in the system table
         """
-        query = f"SELECT * FROM duckdb_tables"
+        query = "SELECT * FROM duckdb_tables"
         
         if schema:
             query += f" WHERE schema_name='{schema}';"
@@ -131,7 +149,7 @@ class TeachDB:
         
     def execute_query(self, query: str) -> TeachDBResult:
         try:
-            result = self.connection.execute(query).fetchall()
+            result = self._connection.execute(query).fetchall()
             return result
         except Exception as ex:
             raise TeachDBQueryExecutionError(
