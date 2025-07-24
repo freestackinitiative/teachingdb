@@ -1,6 +1,8 @@
 duckdb
+duckdb_engine
 requests
 pytest
 pytest-mock
 ipython
+jupysql
 pandas
