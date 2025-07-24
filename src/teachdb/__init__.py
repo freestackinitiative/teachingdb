@@ -64,6 +64,7 @@ class TeachDB:
     
     def load_db(self, 
                 schema: Dict[str, bytes],
+                overwrite: bool = False,
                 schema_name: Optional[str] = None) -> None:
         """Creates tables in a DuckDB connection using the given schema.
         
@@ -76,10 +77,11 @@ class TeachDB:
         }
         Args:
             schema (Dictionary[str, bytes]) = The data you want to load into the DuckDB connection. Expects table names as keys 
-                                            and CSV data representing the table as values. 
+                                            and CSV data representing the table as values.
+            overwrite (bool) = Whether or not to overwrite a schema that was already loaded. Default is False. 
             schema_name (Optional string) = The name you wish to use for the database schema
         """
-        if schema_name not in self.current_schemas:
+        if schema_name not in self.current_schemas or overwrite:
             # Create the schema
             self._connection.sql(f"CREATE SCHEMA {schema_name};")
             # Load the tables

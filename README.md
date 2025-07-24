@@ -160,6 +160,7 @@ Load custom data into the database from a dictionary of CSV data.
 
 **Parameters:**
 - `schema` (Dict[str, bytes]): Dictionary with table names as keys and CSV data as bytes as values.
+- `overwrite` (bool): Whether or not to overwrite an existing schema/database. Default is `False`.
 - `schema_name` (Optional[str]): Name for the database schema.
 
 **Example:**
