@@ -1,0 +1,6 @@
+duckdb
+requests
+pytest
+pytest-mock
+ipython
+pandas

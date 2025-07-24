@@ -157,20 +157,32 @@ class TeachDB:
                 f"the following exception: {str(ex)}"
             )
 
-    def setup_notebook(self) -> None:
+    def setup_notebook(self,
+                       sqlmagic_autopandas: bool = True,
+                       sqlmagic_feedback: bool = False,
+                       sqlmagic_displaycon: bool = False,
+                       display_max_rows: Optional[int] = None,
+                       display_max_columns: Optional[int] = None,
+                       display_width: Optional[int] = None,
+                       display_max_colwidth: Optional[int] = 99,
+                       **pandas_opts) -> None:
         # Get the IPython instance
-        ipython = get_ipython()
-        
+        if (ipython := get_ipython()) is None:
+            print("No notebook detected")
+            return None
         # Load the SQL extension
         ipython.run_line_magic('load_ext', 'sql')
         
         # Set SqlMagic configurations
-        ipython.run_line_magic('config', 'SqlMagic.autopandas = True')
-        ipython.run_line_magic('config', 'SqlMagic.feedback = False')
-        ipython.run_line_magic('config', 'SqlMagic.displaycon = False')
+        ipython.run_line_magic('config', f'SqlMagic.autopandas = {sqlmagic_autopandas}')
+        ipython.run_line_magic('config', f'SqlMagic.feedback = {sqlmagic_feedback}')
+        ipython.run_line_magic('config', f'SqlMagic.displaycon = {sqlmagic_displaycon}')
         
         # Set pandas display options
-        pd.set_option('display.max_rows', None)
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.width', None)
-        pd.set_option('display.max_colwidth', 99)
+        pd.set_option('display.max_rows', display_max_rows)
+        pd.set_option('display.max_columns', display_max_columns)
+        pd.set_option('display.width', display_width)
+        pd.set_option('display.max_colwidth', display_max_colwidth)
+
+        for param, val in pandas_opts.items():
+            pd.set_option(param, val)
